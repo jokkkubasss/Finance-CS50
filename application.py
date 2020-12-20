@@ -36,7 +36,7 @@ Session(app)
 db = SQL("sqlite:///finance.db")
 
 # Make sure API key is set
-# API KEY: pk_b4018f3fffe6495fa6e18de64641f4f0
+# API KEY: You have to set the API KEY in your environment.
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
@@ -46,19 +46,6 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
     user_id = session['user_id']
-
-    """SELECT symbol, name, SUM(shares) AS 'shares' FROM (SELECT
-companies.symbol AS 'symbol',
-companies.name AS 'name',
-CASE
- WHEN purchases.type LIKE 'sell' THEN purchases.shares*-1
- ELSE purchases.shares
-END AS 'shares',
-purchases.type AS 'type'
-
-FROM purchases JOIN companies ON purchases.symbol = companies.symbol WHERE user_id = 8)
-GROUP BY symbol"""
-
 
     stocks_portf = db.execute("SELECT `c`.`symbol` AS `symbol`, `c`.`name` AS `name`, SUM( ( CASE WHEN `p`.`type` = 'sell' THEN  `p`.`shares`*-1 ELSE  `p`.`shares` END ) ) AS `total_shares`, `p`.`type` AS `type` FROM `purchases` AS `p` JOIN `companies` AS `c` ON `p`.`symbol` = `c`.`symbol`  WHERE `p`.`user_id` = :user_id GROUP BY `c`.`symbol` HAVING `total_shares` <> 0",
                         user_id=user_id)
@@ -88,11 +75,7 @@ def buy():
         symbol = request.form['symbol']
         shares = request.form['shares']
 
-     #   try:
         price = lookup(symbol)['price']
-      #  except TypeError:
-          #  flash("Symbol does not exist. ")
-         #   return redirect("/buy")
 
         name = lookup(symbol)['name']
 
