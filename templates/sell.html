@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+    <h2>
+        Sell
+    </h2>
+    <form action="/sell" method="post">
+
+        <select class="custom-select custom-select-lg mb-3" name="symbol" style="width: 200px; font-size: medium; height: 38px;">
+          <option hidden value="1">Select shares</option>
+        {% for row in stocks %}
+
+          <option name="{{ row['symbol'] }}">{{ row['symbol'] }} (Left: {{ row['total_shares'] }})</option>
+
+        {% endfor %}
+        </select>
+
+
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="shares" placeholder="Enter shares quantity" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Sell</button>
+    </form>
+{% endblock %}

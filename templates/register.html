@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#reg-form').submit(function(event){
+        event.preventDefault();
+        alert("PREVENTING DEFAULT")
+        $.ajax({
+              url: 'check', //server url
+              type: 'GET',    //passing data as post method
+              dataType: 'json', // returning data as json
+              data: {username:$('#reg-user').val(),},  //form values
+              success: function(json)
+              {
+                if (json.user_exists == "true") {
+                alert("User with this username already exists.");
+
+               } else if (json.user_exists == "false") {
+                  document.getElementById("reg-form").submit();
+              }
+            }
+
+
+          });
+      });
+
+    });
+
+    </script>
+
+
+
+
+    <form action="/register" method="post" id="reg-form" class="needs-validation" novalidate>
+
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" id="reg-user" placeholder="Username" type="text" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" name="password" id="reg-pass" placeholder="Password" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="confirmation" id="reg-reppass" placeholder="Repeat password" type="password">
+        </div>
+
+        <button class="btn btn-primary" id="reg-submit" type="submit">Register</button>
+    </form>
+{% endblock %}

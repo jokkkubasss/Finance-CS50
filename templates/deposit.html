@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Deposit
+{% endblock %}
+
+{% block main %}
+
+    <script>
+
+        function validateForm() {
+              var x = document.getElementById("deposit_id").value;
+              if (isNaN(x)) {
+                alert("Not a number.");
+                return false;
+              } else if (x > 10000) {
+                alert("Exceeds the allowed amount.");
+                return false;
+              } else {
+                  return true;
+              }
+            }
+    </script>
+
+    <h2>
+        Deposit
+    </h2>
+    <br>
+    <h3>
+        Maximum deposit is 10,000 USD per 24 hours.
+    </h3>
+    <form name="depositForm" action="/deposit" onsubmit="return validateForm();" method="post">
+        <div class="form-group">
+            <input id="deposit_id" autocomplete="off" autofocus class="form-control" name="deposit" placeholder="Enter deposit amount" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Confirm</button>
+    </form>
+{% endblock %}
